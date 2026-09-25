@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ánh Sáng Giáng Sinh – Hành Trình Đức Tin Cho Thiếu Nhi</title>
+  <meta name="description" content="Website Công Giáo Giáng Sinh tươi sáng, ấm áp và sinh động dành cho thiếu nhi và gia đình: cùng Chúa Hài Đồng khám phá hy vọng, niềm tin, yêu thương và hang đá Bêlem.">
+
+  <!-- Tailwind CSS Play CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'kid-sky': '#e0f2fe',
+            'kid-blue-bright': '#0284c7',
+            'kid-gold': '#f59e0b',
+            'kid-gold-light': '#fde047',
+            'kid-gold-warm': '#d97706',
+            'kid-red': '#ef4444',
+            'kid-green': '#10b981',
+            'kid-purple': '#9333ea',
+            'kid-pink': '#db2777'
+          },
+          fontFamily: {
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            kids: ['"Nunito"', '"Comfortaa"', 'system-ui', 'sans-serif'],
+            script: ['"Comfortaa"', 'cursive']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Material Design 3 Custom Tokens & Styles for Kids (Light & Bright Mode) -->
+  <link rel="stylesheet" href="css/m3-styles.css">
+  
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌟</text></svg>">
+</head>
+<body class="bg-gradient-to-b from-sky-100 via-amber-50 to-blue-50 text-slate-800 font-kids relative overflow-x-hidden antialiased selection:bg-yellow-300 selection:text-amber-950">
+
+  <!-- Fullscreen Particle Sky Canvas (Bông tuyết trắng và chùm sao lấp lánh nhẹ) -->
+  <canvas id="sky-canvas" class="fixed inset-0 pointer-events-none z-10 w-full h-full"></canvas>
+
+  <!-- M3 Top App Bar (Thanh Điều Hướng Màu Sáng Tươi Tắn) -->
+  <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 backdrop-blur-xl bg-white/95 border-b-2 border-amber-300 shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <!-- Brand & Logo -->
+      <a href="#hero" class="flex items-center gap-3.5 group">
+        <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-amber-400 to-yellow-300 border-2 border-white flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
+          <span class="text-white text-2xl font-bold">🌟</span>
+        </div>
+        <div>
+          <span class="block text-base sm:text-lg font-black tracking-wide text-amber-700">ÁNH SÁNG GIÁNG SINH</span>
+          <span class="block text-xs font-extrabold text-sky-700 uppercase tracking-wider">Hành Trình Đức Tin Tuổi Thơ</span>
+        </div>
+      </a>
+
+      <!-- Quick Navigation (Tiếng Việt) -->
+      <nav class="hidden md:flex items-center gap-2 lg:gap-3 text-xs uppercase font-extrabold text-slate-700">
+        <a href="#advent-section" class="px-3.5 py-2 rounded-full hover:text-amber-700 hover:bg-amber-100 transition">Mùa Vọng</a>
+        <a href="#star-section" class="px-3.5 py-2 rounded-full hover:text-amber-700 hover:bg-amber-100 transition">Theo Ánh Sao</a>
+        <a href="#gifts-section" class="px-3.5 py-2 rounded-full hover:text-amber-700 hover:bg-amber-100 transition">Dâng Quà</a>
+        <a href="#word-section" class="px-3.5 py-2 rounded-full hover:text-amber-700 hover:bg-amber-100 transition">Lời Chúa</a>
+        <a href="#letter-section" class="px-3.5 py-2 rounded-full hover:text-amber-700 hover:bg-amber-100 transition">Thư Gửi Chúa</a>
+        <a href="#comfort-section" class="px-3.5 py-2 rounded-full hover:text-amber-700 hover:bg-amber-100 transition">Yêu Thương</a>
+        <a href="#nativity-section" class="px-3.5 py-2 rounded-full hover:text-amber-700 hover:bg-amber-100 transition">Hang Đá</a>
+      </nav>
+
+      <!-- Progress & Music Controller -->
+      <div class="flex items-center gap-3">
+        <!-- Progress Pill -->
+        <div id="global-progress-pill" class="hidden sm:inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-black bg-amber-100 text-amber-900 border-2 border-amber-300 shadow-sm">
+          <span>⭐ Hành Trình: <strong>0%</strong></span>
+        </div>
+
+        <!-- Music Button -->
+        <button id="music-toggle-btn" onclick="window.sacredAudio.toggleMusic()" class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-black border-2 border-amber-300 text-amber-900 bg-amber-100 hover:bg-amber-200 transition shadow-sm" title="Nhạc Giáng Sinh Êm Đềm">
+          <span class="text-base">🎵</span>
+          <span id="music-toggle-label" class="hidden sm:inline">BẬT NHẠC THÁNH CA</span>
+          <div id="music-waves" class="hidden flex items-end gap-0.5 h-3">
+            <span class="w-0.5 h-2 bg-amber-600 animate-pulse"></span>
+            <span class="w-0.5 h-3 bg-amber-700 animate-bounce"></span>
+            <span class="w-0.5 h-1.5 bg-amber-600 animate-pulse"></span>
+          </div>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Thanh tiến trình hành trình -->
+    <div class="w-full bg-amber-100 h-2 overflow-hidden">
+      <div id="global-progress-bar" class="h-full bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 w-0 transition-all duration-700 ease-out shadow-sm"></div>
+    </div>
+  </header>
+
+  <main class="relative z-20 pt-20">
+
+    <!-- HERO SECTION: ÁNH SÁNG ĐÃ ĐẾN (Bầu Trời Ban Ngày Tươi Sáng & Ấm Áp) -->
+    <section id="hero" class="relative min-h-[92vh] flex items-center justify-center px-4 sm:px-6 lg:px-8 overflow-hidden py-16">
+      
+      <!-- Hình nền Bêlem Ban Ngày Tươi Sáng Cho Thiếu Nhi -->
+      <div class="absolute inset-0 z-0">
+        <img src="assets/kids_bethlehem_bright.jpg" alt="Mùa Đông Tươi Sáng Ở Bêlem" class="w-full h-full object-cover object-center filter brightness-100 contrast-100">
+        <div class="absolute inset-0 bg-gradient-to-b from-white/60 via-transparent to-sky-100/90"></div>
+      </div>
+
+      <!-- Ngôi Sao Bêlem Vàng Nắng Tỏa Rạng -->
+      <div class="absolute top-[12%] left-[28%] sm:left-[29%] pointer-events-none z-10">
+        <div class="kids-star-glow w-24 h-24 sm:w-32 sm:h-32 rounded-full flex items-center justify-center">
+          <svg viewBox="0 0 100 100" class="w-full h-full text-amber-400 fill-current drop-shadow-[0_0_20px_#fde047]">
+            <polygon points="50,0 55,38 95,50 55,62 50,100 45,62 5,50 45,38" />
+            <polygon points="50,18 58,42 82,50 58,58 50,82 42,58 18,50 42,42" class="fill-yellow-200" />
+            <circle cx="50" cy="50" r="9" class="fill-white" />
+          </svg>
+        </div>
+      </div>
+
+      <!-- Khối Lời Mời Gọi Tươi Sáng -->
+      <div class="relative z-20 max-w-4xl mx-auto text-center mt-12 sm:mt-16 p-6 sm:p-10 rounded-3xl bg-white/85 backdrop-blur-md border-3 border-amber-300 shadow-[0_12px_40px_rgba(245,158,11,0.2)]">
+        
+        <!-- Huy Hiệu Linh Thánh -->
+        <div class="inline-flex items-center gap-2.5 px-6 py-2 rounded-full bg-gradient-to-r from-amber-100 to-yellow-100 border-2 border-amber-300 text-amber-900 text-xs sm:text-sm font-black uppercase tracking-wider mb-5 shadow-sm">
+          <span>✨</span>
+          <span>Emmanuel – Thiên Chúa Ở Cùng Chúng Ta</span>
+          <span>✨</span>
+        </div>
+
+        <h1 class="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight text-slate-900 uppercase mb-4 leading-tight">
+          ÁNH SÁNG <br class="hidden sm:inline" />
+          <span class="bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 bg-clip-text text-transparent">ĐÃ ĐẾN</span>
+        </h1>
+
+        <p class="text-xl sm:text-3xl font-serif italic text-amber-900 max-w-3xl mx-auto mb-4 font-bold leading-relaxed">
+          “Giáng Sinh không chỉ là một ngày lễ.<br class="hidden sm:inline" />
+          Đó là khoảnh khắc Thiên Chúa đến thật gần bên chúng ta.”
+        </p>
+
+        <p class="text-base sm:text-lg text-slate-700 max-w-2xl mx-auto mb-8 font-bold leading-relaxed">
+          Chào đón các bạn nhỏ đến với hành trình tâm hồn tươi vui rực rỡ! Cùng thắp sáng những ngọn nến Mùa Vọng, bước theo ánh sao và dâng tặng Chúa Hài Đồng những món quà yêu thương nhất nhé!
+        </p>
+
+        <!-- Nút Hành Động M3 -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <button onclick="window.faithJourney.beginJourney(event)" class="m3-kids-btn-primary group">
+            <span class="text-2xl group-hover:rotate-12 transition-transform">✨</span>
+            <span>BẮT ĐẦU HÀNH TRÌNH</span>
+          </button>
+          
+          <a href="#advent-section" class="m3-kids-btn-tonal text-base font-black">
+            <span>Khám Phá Mùa Vọng 🕯️</span>
+          </a>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- SECTION 1 – HÀNH TRÌNH MÙA VỌNG (Nền Sáng Sủa) -->
+    <section id="advent-section" class="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="text-xs font-black uppercase tracking-widest px-4 py-1.5 rounded-full bg-amber-100 text-amber-800 border-2 border-amber-300">Chuẩn Bị Tâm Hồn Đón Chúa</span>
+        <h2 class="text-3xl sm:text-5xl font-black text-slate-900 mt-3 mb-4">HÀNH TRÌNH MÙA VỌNG</h2>
+        <p class="text-slate-700 text-base sm:text-lg font-bold leading-relaxed">
+          Bốn tuần Mùa Vọng là bốn bước chân dẫn lối chúng ta về hang đá Bêlem. Bé hãy bấm vào từng cây nến để thắp lên ngọn lửa sốt mến nhé!
+        </p>
+      </div>
+
+      <!-- 4 Cây Nến Mùa Vọng -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+        
+        <!-- Nến 1: HY VỌNG (Tím) -->
+        <div id="advent-candle-0" onclick="window.faithJourney.lightAdventCandle(0, event)" class="m3-bright-card p-6 flex flex-col items-center text-center cursor-pointer group relative overflow-hidden transition-all bg-white">
+          <div class="candle-aura absolute -top-8 w-36 h-36 rounded-full bg-purple-200 blur-2xl opacity-0 transition-opacity duration-700 pointer-events-none"></div>
+          
+          <div class="relative w-16 h-40 flex flex-col items-center justify-end mb-4">
+            <div class="candle-flame kids-flame opacity-0 scale-0 transition-all duration-700 mb-1"></div>
+            <div class="w-1 h-3 bg-slate-700"></div>
+            <div class="w-12 h-28 rounded-2xl bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 border-2 border-purple-200 shadow-md relative flex items-center justify-center">
+              <span class="text-xs text-white font-black rotate-90 tracking-widest">HY VỌNG</span>
+            </div>
+          </div>
+
+          <div class="candle-status text-xs mb-2 text-amber-600 font-extrabold">👉 Chạm Để Thắp Sáng</div>
+          <h3 class="text-xl font-black text-purple-900 mb-2">TUẦN 1 – HY VỌNG</h3>
+          <p class="text-xs text-slate-700 font-bold italic mb-4">“Khi con đường phía trước còn mịt mờ, con hãy cứ hy vọng. Chúa luôn ở bên con.”</p>
+          
+          <button class="mt-auto m3-kids-btn-tonal text-xs py-2.5 w-full">
+            🕯️ DÀNH PHÚT GIÂY CẦU NGUYỆN
+          </button>
+        </div>
+
+        <!-- Nến 2: ĐỨC TIN (Tím) -->
+        <div id="advent-candle-1" onclick="window.faithJourney.lightAdventCandle(1, event)" class="m3-bright-card p-6 flex flex-col items-center text-center cursor-pointer group relative overflow-hidden transition-all bg-white">
+          <div class="candle-aura absolute -top-8 w-36 h-36 rounded-full bg-purple-200 blur-2xl opacity-0 transition-opacity duration-700 pointer-events-none"></div>
+
+          <div class="relative w-16 h-40 flex flex-col items-center justify-end mb-4">
+            <div class="candle-flame kids-flame opacity-0 scale-0 transition-all duration-700 mb-1"></div>
+            <div class="w-1 h-3 bg-slate-700"></div>
+            <div class="w-12 h-28 rounded-2xl bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 border-2 border-purple-200 shadow-md relative flex items-center justify-center">
+              <span class="text-xs text-white font-black rotate-90 tracking-widest">ĐỨC TIN</span>
+            </div>
+          </div>
+
+          <div class="candle-status text-xs mb-2 text-amber-600 font-extrabold">👉 Chạm Để Thắp Sáng</div>
+          <h3 class="text-xl font-black text-purple-900 mb-2">TUẦN 2 – ĐỨC TIN</h3>
+          <p class="text-xs text-slate-700 font-bold italic mb-4">“Đức tin là tin tưởng Chúa ngay cả khi chúng ta chưa nhìn thấy trọn vẹn con đường.”</p>
+          
+          <button class="mt-auto m3-kids-btn-tonal text-xs py-2.5 w-full">
+            🕯️ MỞ RỘNG TÂM HỒN
+          </button>
+        </div>
+
+        <!-- Nến 3: NIỀM VUI (Hồng Gaudete) -->
+        <div id="advent-candle-2" onclick="window.faithJourney.lightAdventCandle(2, event)" class="m3-bright-card p-6 flex flex-col items-center text-center cursor-pointer group relative overflow-hidden transition-all bg-white">
+          <div class="candle-aura absolute -top-8 w-36 h-36 rounded-full bg-pink-200 blur-2xl opacity-0 transition-opacity duration-700 pointer-events-none"></div>
+
+          <div class="relative w-16 h-40 flex flex-col items-center justify-end mb-4">
+            <div class="candle-flame kids-flame opacity-0 scale-0 transition-all duration-700 mb-1"></div>
+            <div class="w-1 h-3 bg-slate-700"></div>
+            <div class="w-12 h-28 rounded-2xl bg-gradient-to-r from-pink-400 via-rose-500 to-pink-600 border-2 border-pink-200 shadow-md relative flex items-center justify-center">
+              <span class="text-xs text-white font-black rotate-90 tracking-widest">NIỀM VUI</span>
+            </div>
+          </div>
+
+          <div class="candle-status text-xs mb-2 text-amber-600 font-extrabold">👉 Chạm Để Thắp Sáng</div>
+          <h3 class="text-xl font-black text-pink-900 mb-2">TUẦN 3 – NIỀM VUI</h3>
+          <p class="text-xs text-slate-700 font-bold italic mb-4">“Niềm vui Giáng Sinh bắt đầu khi con nhận ra mình được Chúa yêu thương vô ngần.”</p>
+          
+          <button class="mt-auto m3-kids-btn-tonal text-xs py-2.5 w-full">
+            🕯️ LAN TỎA NIỀM VUI
+          </button>
+        </div>
+
+        <!-- Nến 4: TÌNH YÊU (Tím) -->
+        <div id="advent-candle-3" onclick="window.faithJourney.lightAdventCandle(3, event)" class="m3-bright-card p-6 flex flex-col items-center text-center cursor-pointer group relative overflow-hidden transition-all bg-white">
+          <div class="candle-aura absolute -top-8 w-36 h-36 rounded-full bg-purple-200 blur-2xl opacity-0 transition-opacity duration-700 pointer-events-none"></div>
+
+          <div class="relative w-16 h-40 flex flex-col items-center justify-end mb-4">
+            <div class="candle-flame kids-flame opacity-0 scale-0 transition-all duration-700 mb-1"></div>
+            <div class="w-1 h-3 bg-slate-700"></div>
+            <div class="w-12 h-28 rounded-2xl bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 border-2 border-purple-200 shadow-md relative flex items-center justify-center">
+              <span class="text-xs text-white font-black rotate-90 tracking-widest">TÌNH YÊU</span>
+            </div>
+          </div>
+
+          <div class="candle-status text-xs mb-2 text-amber-600 font-extrabold">👉 Chạm Để Thắp Sáng</div>
+          <h3 class="text-xl font-black text-purple-900 mb-2">TUẦN 4 – TÌNH YÊU</h3>
+          <p class="text-xs text-slate-700 font-bold italic mb-4">“Thiên Chúa yêu thương chúng ta đến nỗi đã ban chính Con Một của Người.”</p>
+          
+          <button class="mt-auto m3-kids-btn-tonal text-xs py-2.5 w-full">
+            🕯️ CHỌN LỰA YÊU THƯƠNG
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION 2 – DÕI THEO ÁNH SAO (Sáng Rực Rỡ) -->
+    <section id="star-section" class="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="text-xs font-black uppercase tracking-widest px-4 py-1.5 rounded-full bg-amber-100 text-amber-800 border-2 border-amber-300">Đường Về Bêlem Của Bé</span>
+        <h2 class="text-3xl sm:text-5xl font-black text-slate-900 mt-3 mb-4">DÕI THEO ÁNH SAO</h2>
+        <p class="text-slate-700 text-base sm:text-lg font-bold leading-relaxed">
+          Bảy chặng đường thiêng liêng giúp các bạn nhỏ tiến gần hơn tới hang đá Chúa Hài Đồng. Mỗi bước hoàn thành sẽ làm Ngôi Sao Bêlem bừng sáng rực rỡ!
+        </p>
+      </div>
+
+      <!-- Khối Hiển Thị Ánh Sao Bêlem Nền Sáng -->
+      <div class="relative max-w-xl mx-auto mb-12 text-center p-8 rounded-3xl bg-gradient-to-b from-white via-amber-50 to-yellow-100 border-3 border-amber-400 shadow-[0_12px_35px_rgba(245,158,11,0.2)]">
+        <div class="relative w-28 h-28 mx-auto flex items-center justify-center mb-4">
+          <div id="journey-star-glow" class="absolute inset-0 rounded-full bg-amber-300/40 blur-xl opacity-60 transition-all duration-700"></div>
+          <div id="journey-star-core" class="kids-star-glow w-24 h-24 transition-transform duration-700">
+            <svg viewBox="0 0 100 100" class="w-full h-full text-amber-500 fill-current">
+              <polygon points="50,0 55,36 95,50 55,64 50,100 45,64 5,50 45,36" />
+              <polygon points="50,15 60,40 85,50 60,60 50,85 40,60 15,50 40,40" class="fill-yellow-300" />
+              <circle cx="50" cy="50" r="10" class="fill-white" />
+            </svg>
+          </div>
+        </div>
+        <h4 class="text-amber-800 font-black text-2xl">Ngôi Sao Dẫn Đường Bêlem</h4>
+        <p class="text-xs sm:text-sm text-slate-600 font-extrabold mt-1">Hoàn thành từng bước để giúp Ánh Sao tỏa sáng rạng ngời</p>
+        
+        <!-- Thanh đường đi người lữ hành -->
+        <div class="w-full bg-amber-200/60 rounded-full h-4 mt-5 p-1 border border-amber-300 overflow-hidden shadow-inner">
+          <div id="star-progress-path" class="h-full bg-gradient-to-r from-yellow-400 via-amber-400 to-amber-500 rounded-full w-0 transition-all duration-700 shadow-sm"></div>
+        </div>
+      </div>
+
+      <!-- 7 Bước Chân Đức Tin Dễ Thương -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-3.5 mb-10">
+        
+        <!-- Bước 1: Cầu nguyện -->
+        <div id="star-step-0" onclick="window.faithJourney.selectStarStep(0, event)" class="m3-bright-card p-4 text-center cursor-pointer transition-all duration-300 opacity-90 hover:opacity-100 flex flex-col justify-between bg-white">
+          <div class="text-3xl mb-2">🙏</div>
+          <div class="text-xs font-black text-amber-800 uppercase">1. CẦU NGUYỆN</div>
+          <p class="text-[11px] text-slate-600 font-bold mt-1">5 phút thinh lặng với Chúa</p>
+          <div class="step-check hidden mt-2 text-xs text-emerald-600 font-black">✓ ĐÃ LÀM</div>
+        </div>
+
+        <!-- Bước 2: Lời Chúa -->
+        <div id="star-step-1" onclick="window.faithJourney.selectStarStep(1, event)" class="m3-bright-card p-4 text-center cursor-pointer transition-all duration-300 opacity-90 hover:opacity-100 flex flex-col justify-between bg-white">
+          <div class="text-3xl mb-2">📖</div>
+          <div class="text-xs font-black text-amber-800 uppercase">2. LỜI CHÚA</div>
+          <p class="text-[11px] text-slate-600 font-bold mt-1">Đèn soi lối con đi</p>
+          <div class="step-check hidden mt-2 text-xs text-emerald-600 font-black">✓ ĐÃ LÀM</div>
+        </div>
+
+        <!-- Bước 3: Tha thứ -->
+        <div id="star-step-2" onclick="window.faithJourney.selectStarStep(2, event)" class="m3-bright-card p-4 text-center cursor-pointer transition-all duration-300 opacity-90 hover:opacity-100 flex flex-col justify-between bg-white">
+          <div class="text-3xl mb-2">❤️</div>
+          <div class="text-xs font-black text-amber-800 uppercase">3. THA THỨ</div>
+          <p class="text-[11px] text-slate-600 font-bold mt-1">Mỉm cười làm hòa</p>
+          <div class="step-check hidden mt-2 text-xs text-emerald-600 font-black">✓ ĐÃ LÀM</div>
+        </div>
+
+        <!-- Bước 4: Bác ái -->
+        <div id="star-step-3" onclick="window.faithJourney.selectStarStep(3, event)" class="m3-bright-card p-4 text-center cursor-pointer transition-all duration-300 opacity-90 hover:opacity-100 flex flex-col justify-between bg-white">
+          <div class="text-3xl mb-2">🤝</div>
+          <div class="text-xs font-black text-amber-800 uppercase">4. BÁC ÁI</div>
+          <p class="text-[11px] text-slate-600 font-bold mt-1">Giúp đỡ bạn nhỏ</p>
+          <div class="step-check hidden mt-2 text-xs text-emerald-600 font-black">✓ ĐÃ LÀM</div>
+        </div>
+
+        <!-- Bước 5: Bình an -->
+        <div id="star-step-4" onclick="window.faithJourney.selectStarStep(4, event)" class="m3-bright-card p-4 text-center cursor-pointer transition-all duration-300 opacity-90 hover:opacity-100 flex flex-col justify-between bg-white">
+          <div class="text-3xl mb-2">🕊️</div>
+          <div class="text-xs font-black text-amber-800 uppercase">5. BÌNH AN</div>
+          <p class="text-[11px] text-slate-600 font-bold mt-1">Trút bỏ mọi nỗi sợ</p>
+          <div class="step-check hidden mt-2 text-xs text-emerald-600 font-black">✓ ĐÃ LÀM</div>
+        </div>
+
+        <!-- Bước 6: Tri ân -->
+        <div id="star-step-5" onclick="window.faithJourney.selectStarStep(5, event)" class="m3-bright-card p-4 text-center cursor-pointer transition-all duration-300 opacity-90 hover:opacity-100 flex flex-col justify-between bg-white">
+          <div class="text-3xl mb-2">🌹</div>
+          <div class="text-xs font-black text-amber-800 uppercase">6. TRI ÂN</div>
+          <p class="text-[11px] text-slate-600 font-bold mt-1">Cảm tạ mọi hồng ân</p>
+          <div class="step-check hidden mt-2 text-xs text-emerald-600 font-black">✓ ĐÃ LÀM</div>
+        </div>
+
+        <!-- Bước 7: Đức tin -->
+        <div id="star-step-6" onclick="window.faithJourney.selectStarStep(6, event)" class="m3-bright-card p-4 text-center cursor-pointer transition-all duration-300 opacity-90 hover:opacity-100 flex flex-col justify-between bg-white">
+          <div class="text-3xl mb-2">⭐</div>
+          <div class="text-xs font-black text-amber-800 uppercase">7. ĐỨC TIN</div>
+          <p class="text-[11px] text-slate-600 font-bold mt-1">Tin cậy nơi Chúa</p>
+          <div class="step-check hidden mt-2 text-xs text-emerald-600 font-black">✓ ĐÃ LÀM</div>
+        </div>
+
+      </div>
+
+      <!-- Banner Suy Niệm Nổi Bật -->
+      <div id="star-reflection-banner" class="max-w-2xl mx-auto"></div>
+
+      <!-- Chúc Mừng Hoàn Thành 7 Bước -->
+      <div id="star-completed-celebration" class="hidden mt-8 max-w-2xl mx-auto p-8 rounded-3xl bg-gradient-to-r from-yellow-200 via-amber-100 to-yellow-200 border-3 border-amber-400 text-center animate-fade-in shadow-xl">
+        <span class="text-5xl animate-bounce">🌟 🎉</span>
+        <h3 class="text-2xl font-black text-amber-900 mt-2 mb-2">Bé Đã Hoàn Thành Toàn Bộ 7 Bước!</h3>
+        <p class="text-slate-800 text-base font-bold mb-5 leading-relaxed">
+          Ngôi Sao Bêlem đã sáng rực rỡ trên bầu trời, dẫn thẳng bé tới hang đá nơi Chúa Hài Đồng đang mỉm cười chờ đón con!
+        </p>
+        <a href="#gifts-section" class="m3-kids-btn-primary text-sm py-3 px-8">
+          Tiến Về Máng Cỏ Dâng Quà →
+        </a>
+      </div>
+    </section>
+
+    <!-- SECTION 3 – MÓN QUÀ DÂNG CHÚA HÀI ĐỒNG (Sáng Rực Rỡ) -->
+    <section id="gifts-section" class="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="text-xs font-black uppercase tracking-widest px-4 py-1.5 rounded-full bg-amber-100 text-amber-800 border-2 border-amber-300">Dâng Lên Máng Cỏ</span>
+        <h2 class="text-3xl sm:text-5xl font-black text-slate-900 mt-3 mb-4">
+          BẠN SẼ DÂNG CHÚA ĐIỀU GÌ MÙA GIÁNG SINH NÀY?
+        </h2>
+        <p class="text-slate-700 text-base sm:text-lg font-bold leading-relaxed">
+          Chúa Giêsu không cần những món quà đắt tiền mua ở cửa hàng. Người mong ước những hành động yêu thương chân thành từ trái tim bé nhỏ của con.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        
+        <!-- Hình Ảnh Hang Đá Chúa Hài Đồng Ban Ngày Tươi Sáng -->
+        <div class="lg:col-span-6 relative rounded-3xl overflow-hidden border-3 border-amber-300 shadow-xl group bg-white">
+          <img src="assets/kids_nativity_bright.jpg" alt="Chúa Hài Đồng Mỉm Cười Cùng Mẹ Maria và Thánh Giuse" class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-700">
+          <div class="absolute bottom-4 left-4 right-4 p-3.5 rounded-2xl bg-white/95 backdrop-blur-md border-2 border-amber-200 text-center shadow-md">
+            <span class="text-sm text-amber-900 font-black">“Hôm nay, Đấng Cứu Thế đã sinh ra cho chúng ta!”</span>
+          </div>
+        </div>
+
+        <!-- 5 Món Quà Thiêng Liêng Dành Cho Bé Lựa Chọn -->
+        <div class="lg:col-span-6 flex flex-col gap-3.5">
+          
+          <button onclick="window.faithJourney.offerGift('Cầu Nguyện', '🙏', this, event)" class="gift-btn m3-bright-card p-4 sm:p-5 flex items-center justify-between text-left hover:scale-[1.02] transition bg-white">
+            <div class="flex items-center gap-4">
+              <span class="text-4xl">🙏</span>
+              <div>
+                <h4 class="font-black text-amber-800 text-lg">CẦU NGUYỆN</h4>
+                <p class="text-xs text-slate-600 font-bold">Dành những giây phút thủ thỉ trò chuyện cùng Chúa Giêsu</p>
+              </div>
+            </div>
+            <span class="text-xs font-black px-4 py-2 rounded-full bg-amber-400 text-amber-950 shadow-sm">Dâng Quà</span>
+          </button>
+
+          <button onclick="window.faithJourney.offerGift('Tha Thứ', '❤️', this, event)" class="gift-btn m3-bright-card p-4 sm:p-5 flex items-center justify-between text-left hover:scale-[1.02] transition bg-white">
+            <div class="flex items-center gap-4">
+              <span class="text-4xl">❤️</span>
+              <div>
+                <h4 class="font-black text-amber-800 text-lg">THA THỨ</h4>
+                <p class="text-xs text-slate-600 font-bold">Bỏ qua lỗi lầm của bạn bè, anh chị em và mỉm cười ôm nhau</p>
+              </div>
+            </div>
+            <span class="text-xs font-black px-4 py-2 rounded-full bg-amber-400 text-amber-950 shadow-sm">Dâng Quà</span>
+          </button>
+
+          <button onclick="window.faithJourney.offerGift('Bác Ái', '🤝', this, event)" class="gift-btn m3-bright-card p-4 sm:p-5 flex items-center justify-between text-left hover:scale-[1.02] transition bg-white">
+            <div class="flex items-center gap-4">
+              <span class="text-4xl">🤝</span>
+              <div>
+                <h4 class="font-black text-amber-800 text-lg">BÁC ÁI</h4>
+                <p class="text-xs text-slate-600 font-bold">Chia sẻ đồ chơi, kẹo bánh hoặc giúp đỡ người nghèo khổ</p>
+              </div>
+            </div>
+            <span class="text-xs font-black px-4 py-2 rounded-full bg-amber-400 text-amber-950 shadow-sm">Dâng Quà</span>
+          </button>
+
+          <button onclick="window.faithJourney.offerGift('Tri Ân', '🌹', this, event)" class="gift-btn m3-bright-card p-4 sm:p-5 flex items-center justify-between text-left hover:scale-[1.02] transition bg-white">
+            <div class="flex items-center gap-4">
+              <span class="text-4xl">🌹</span>
+              <div>
+                <h4 class="font-black text-amber-800 text-lg">TRI ÂN</h4>
+                <p class="text-xs text-slate-600 font-bold">Cảm ơn cha mẹ, thầy cô và tạ ơn Chúa vì từng ngày bình an</p>
+              </div>
+            </div>
+            <span class="text-xs font-black px-4 py-2 rounded-full bg-amber-400 text-amber-950 shadow-sm">Dâng Quà</span>
+          </button>
+
+          <button onclick="window.faithJourney.offerGift('Khởi Đầu Mới', '🕊️', this, event)" class="gift-btn m3-bright-card p-4 sm:p-5 flex items-center justify-between text-left hover:scale-[1.02] transition bg-white">
+            <div class="flex items-center gap-4">
+              <span class="text-4xl">🕊️</span>
+              <div>
+                <h4 class="font-black text-amber-800 text-lg">KHỞI ĐẦU MỚI</h4>
+                <p class="text-xs text-slate-600 font-bold">Quyết tâm chăm ngoan hơn, bớt lười biếng và sống chan hòa</p>
+              </div>
+            </div>
+            <span class="text-xs font-black px-4 py-2 rounded-full bg-amber-400 text-amber-950 shadow-sm">Dâng Quà</span>
+          </button>
+
+        </div>
+
+      </div>
+
+      <!-- Hộp Thoại Phản Hồi Khi Dâng Quà -->
+      <div id="gift-feedback-display" class="mt-8"></div>
+    </section>
+
+    <!-- SECTION 4 – PHÚT GIÂY BÊN LỜI CHÚA (Sáng Tươi Tắn) -->
+    <section id="word-section" class="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="text-xs font-black uppercase tracking-widest px-4 py-1.5 rounded-full bg-amber-100 text-amber-800 border-2 border-amber-300">Kinh Thánh Tuổi Thơ</span>
+        <h2 class="text-3xl sm:text-5xl font-black text-slate-900 mt-3 mb-4">PHÚT GIÂY BÊN LỜI CHÚA</h2>
+        <p class="text-slate-700 text-base sm:text-lg font-bold leading-relaxed">
+          Lắng đọng tâm hồn bên trang Lời Chúa lung linh. Viết lời nguyện cầu của con để dâng bay lên cùng Ánh Sao Bêlem!
+        </p>
+      </div>
+
+      <div class="relative rounded-3xl overflow-hidden border-3 border-amber-300 shadow-xl bg-white mb-8">
+        
+        <!-- Hình Ảnh Kinh Thánh Cho Thiếu Nhi Tươi Sáng -->
+        <div class="relative h-64 sm:h-84 w-full overflow-hidden">
+          <img src="assets/kids_scripture.jpg" alt="Kinh Thánh Giáng Sinh Cho Trẻ Em" class="w-full h-full object-cover object-center filter brightness-100">
+          <div class="absolute inset-0 bg-gradient-to-t from-white via-white/20 to-transparent"></div>
+          
+          <div class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
+            <span class="text-xs sm:text-sm uppercase font-black tracking-widest px-4 py-1.5 rounded-full bg-amber-400 text-amber-950 mb-2 shadow-sm">Tin Mừng Gioan 1:14</span>
+            <blockquote class="text-2xl sm:text-4xl md:text-5xl font-black text-slate-900 max-w-3xl drop-shadow leading-tight">
+              “Ngôi Lời đã trở nên người phàm <br class="hidden sm:inline" />và cư ngụ giữa chúng ta.”
+            </blockquote>
+          </div>
+        </div>
+
+        <!-- Khung Dâng Lời Nguyện Cầu Của Bé -->
+        <div id="prayer-box-container" class="relative p-6 sm:p-10 max-w-3xl mx-auto bg-white">
+          <h3 class="text-xl sm:text-2xl font-black text-amber-800 text-center mb-2">
+            Chúa đang nói điều gì với trái tim bé nhỏ của con hôm nay?
+          </h3>
+          <p class="text-sm text-slate-600 font-bold text-center mb-6">
+            Bé hãy viết lời nguyện cầu riêng của mình cho cha mẹ, ông bà, bạn bè hay những người đang gặp khó khăn nhé:
+          </p>
+
+          <div class="relative mb-6">
+            <label for="prayer-input" class="block text-xs uppercase font-black text-amber-800 mb-2">
+              Hôm nay, lạy Chúa, con muốn cầu nguyện cho…
+            </label>
+            <textarea id="prayer-input" rows="3" placeholder="Ví dụ: Xin Chúa ban sức khỏe cho bố mẹ, cho các bạn nhỏ mồ côi có áo ấm mùa đông, và cho gia đình con luôn yêu thương nhau..." class="w-full px-5 py-4 rounded-2xl bg-amber-50/50 border-2 border-amber-300 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-500 focus:ring-4 focus:ring-amber-300/30 text-sm font-bold transition"></textarea>
+          </div>
+
+          <div class="text-center">
+            <button onclick="window.faithJourney.offerPrayer(event)" class="m3-kids-btn-primary px-8 py-3.5 text-base sm:text-lg">
+              <span>🕯️</span>
+              <span>DÂNG LỜI NGUYỆN CẦU</span>
+            </button>
+          </div>
+
+          <div id="prayer-result-box" class="mt-6"></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION 5 – LÁ THƯ GỬI CHÚA HÀI ĐỒNG (Trang Thư Trắng Tươi Sáng) -->
+    <section id="letter-section" class="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="text-xs font-black uppercase tracking-widest px-4 py-1.5 rounded-full bg-amber-100 text-amber-800 border-2 border-amber-300">Tâm Tình Tuổi Thơ</span>
+        <h2 class="text-3xl sm:text-5xl font-black text-slate-900 mt-3 mb-2">LÁ THƯ GỬI CHÚA HÀI ĐỒNG</h2>
+        <p class="text-amber-700 font-serif italic text-lg sm:text-2xl font-bold">“Hãy thổ lộ cùng Người những ước mong trong trái tim con.”</p>
+      </div>
+
+      <div class="relative max-w-3xl mx-auto">
+        
+        <!-- Giấy Thư Đáng Yêu Trang Trí Giáng Sinh Nền Trắng Sáng -->
+        <div id="parchment-letter-wrapper" class="relative rounded-3xl p-6 sm:p-12 border-4 border-amber-400 shadow-2xl overflow-hidden bg-[#fffdf5] text-slate-900">
+          
+          <!-- Họa Tiết Nền Lá Thư -->
+          <div class="absolute inset-0 pointer-events-none opacity-20">
+            <img src="assets/kids_letter.jpg" alt="Trang Thư Giáng Sinh Tuổi Thơ" class="w-full h-full object-cover">
+          </div>
+
+          <div class="relative z-10">
+            
+            <!-- Đầu Thư Dễ Thương -->
+            <div class="flex items-center justify-between border-b-2 border-amber-300 pb-4 mb-6">
+              <div>
+                <span class="text-3xl sm:text-4xl font-black text-amber-800">Chúa Giêsu yêu quý,</span>
+                <p class="text-xs font-bold text-amber-700 italic">Thư con viết gửi về Hang Đá Bêlem</p>
+              </div>
+              <div class="w-14 h-14 rounded-full bg-amber-400 border-2 border-white flex items-center justify-center text-white font-black text-2xl shadow-md">
+                ❤️
+              </div>
+            </div>
+
+            <!-- Các Câu Hỏi Hướng Dẫn Tâm Hồn -->
+            <div class="space-y-4 text-sm font-bold text-slate-800">
+              <div>
+                <label class="block mb-1 text-amber-900">1. Điều con cảm thấy biết ơn Chúa nhất trong năm qua:</label>
+                <input id="letter-gratitude" type="text" placeholder="Con được đi học, có gia đình ấm êm, có bạn bè tốt..." class="w-full px-4 py-2.5 rounded-xl bg-white border-2 border-amber-300 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-500">
+              </div>
+
+              <div>
+                <label class="block mb-1 text-amber-900">2. Nỗi lo lắng hay buồn rầu con muốn trao hết cho Chúa:</label>
+                <input id="letter-worry" type="text" placeholder="Bài kiểm tra khó, lúc bị điểm chưa tốt, nỗi sợ bóng tối..." class="w-full px-4 py-2.5 rounded-xl bg-white border-2 border-amber-300 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-500">
+              </div>
+
+              <div>
+                <label class="block mb-1 text-amber-900">3. Người bạn hoặc người thân con muốn cầu xin Chúa che chở:</label>
+                <input id="letter-prayfor" type="text" placeholder="Tên ông bà đang ốm, người bạn buồn, các em bé khó khăn..." class="w-full px-4 py-2.5 rounded-xl bg-white border-2 border-amber-300 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-500">
+              </div>
+
+              <div>
+                <label class="block mb-1 text-amber-900">4. Một thói quen xấu con muốn sửa đổi để ngoan hơn:</label>
+                <input id="letter-change" type="text" placeholder="Bớt nhõng nhẽo, nghe lời cha mẹ hơn, không trêu chọc bạn..." class="w-full px-4 py-2.5 rounded-xl bg-white border-2 border-amber-300 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-500">
+              </div>
+
+              <div>
+                <label class="block mb-1 text-amber-900">5. Ước mơ tươi đẹp nhất của con trong năm mới:</label>
+                <input id="letter-hope" type="text" placeholder="Gia đình con luôn hạnh phúc, con học giỏi và làm Chúa vui lòng..." class="w-full px-4 py-2.5 rounded-xl bg-white border-2 border-amber-300 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-500">
+              </div>
+            </div>
+
+            <!-- Nút Trao Thư -->
+            <div class="mt-8 text-center pt-4 border-t-2 border-amber-200">
+              <button onclick="window.faithJourney.sendLetter(event)" class="m3-kids-btn-primary px-8 py-3.5 text-base sm:text-lg">
+                <span>❤️</span>
+                <span>ĐẶT THƯ VÀO TAY CHÚA</span>
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div id="letter-sent-container" class="hidden mt-6"></div>
+
+      </div>
+    </section>
+
+    <!-- SECTION 6 – KHI CON MỎI MỆT… (Bầu Trời Ban Mai Êm Dịu Sáng Sủa) -->
+    <section id="comfort-section" class="py-24 px-4 sm:px-6 lg:px-8 relative bg-gradient-to-b from-sky-50 via-amber-50 to-sky-100 overflow-hidden">
+      
+      <div class="max-w-4xl mx-auto text-center relative z-20">
+        
+        <span class="text-xs font-black uppercase tracking-widest px-4 py-1.5 rounded-full bg-amber-100 text-amber-800 border-2 border-amber-300">Bến Đỗ Bình An</span>
+        <h2 class="text-3xl sm:text-5xl font-black text-slate-900 mt-3 mb-8">
+          KHI CON MỎI MỆT…
+        </h2>
+
+        <!-- Ngọn Nến Sưởi Ấm Tâm Hồn -->
+        <div class="relative w-36 h-48 mx-auto flex flex-col items-center justify-end mb-6">
+          <div id="tired-candle-aura" class="absolute top-2 w-36 h-36 rounded-full bg-amber-300/40 blur-3xl transition-transform duration-1000 pointer-events-none"></div>
+          
+          <div class="kids-flame mb-1"></div>
+          <div class="w-1 h-3 bg-slate-700"></div>
+          <div class="w-14 h-28 rounded-2xl bg-gradient-to-r from-amber-100 via-white to-amber-200 shadow-md border-2 border-amber-300 relative"></div>
+        </div>
+
+        <!-- Dòng Thông Điệp An Ủi Tuần Tự -->
+        <div class="min-h-[100px] flex items-center justify-center mb-8 px-4">
+          <p id="tired-message-display" class="text-2xl sm:text-4xl font-serif italic text-amber-900 font-bold transition-opacity duration-700">
+            “Khi con sợ hãi, Chúa luôn ở cùng con.”
+          </p>
+        </div>
+
+        <!-- Nút Hít Thở Nhận Bình An -->
+        <button onclick="window.faithJourney.startTiredMeditation()" class="m3-kids-btn-tonal text-sm sm:text-base px-8 py-3 mb-10">
+          <span>🕊️</span>
+          <span>Bé Hãy Hít Thở & Nhận Bình An Nào</span>
+        </button>
+
+        <!-- Đỉnh Cao Khải Hoàn: EMMANUEL (Nền Sáng Tưng Bừng) -->
+        <div id="emmanuel-reveal" class="hidden opacity-0 transition-opacity duration-1000 p-8 sm:p-12 rounded-3xl bg-gradient-to-r from-amber-100 via-yellow-100 to-amber-100 border-4 border-amber-400 shadow-xl">
+          <span class="text-xs uppercase tracking-widest font-black text-amber-800">Lời Hứa Vĩnh Cửu Của Thiên Chúa</span>
+          <h1 class="text-5xl sm:text-7xl md:text-8xl font-black text-amber-700 tracking-wider my-3 drop-shadow">
+            EMMANUEL
+          </h1>
+          <h3 class="text-2xl sm:text-4xl font-serif italic text-slate-800 font-bold tracking-wide">
+            “THIÊN CHÚA Ở CÙNG CHÚNG TA.”
+          </h3>
+          <p class="text-slate-700 text-base max-w-lg mx-auto mt-4 font-bold leading-relaxed">
+            Dù khó khăn có lớn chừng nào, Chúa luôn ôm con vào lòng bằng tình yêu thương dịu dàng và ấm áp nhất!
+          </p>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- FINAL SECTION – HANG ĐÁ BÊLEM (Sáng Bừng Phúc Lành) -->
+    <section id="nativity-section" class="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative">
+      
+      <div class="relative rounded-3xl overflow-hidden border-4 border-amber-400 shadow-2xl bg-white">
+        
+        <!-- Bức Tranh Hang Đá Toàn Cảnh Rực Rỡ -->
+        <div class="relative min-h-[520px] lg:min-h-[640px] flex items-end">
+          <img src="assets/kids_nativity_bright.jpg" alt="Hang Đá Giáng Sinh Đầy Ánh Sáng Ban Ngày" class="absolute inset-0 w-full h-full object-cover object-center filter brightness-100">
+          <div class="absolute inset-0 bg-gradient-to-t from-white/95 via-white/50 to-transparent"></div>
+          
+          <div class="relative z-10 p-6 sm:p-12 md:p-16 max-w-3xl">
+            
+            <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-amber-400 text-amber-950 text-xs font-black uppercase tracking-wider mb-5 shadow-sm">
+              <span>🌟</span> Đích Đến Rực Rỡ Của Hành Trình <span>🌟</span>
+            </div>
+
+            <h2 class="text-4xl sm:text-6xl md:text-7xl font-black text-slate-900 tracking-tight leading-tight mb-4 drop-shadow">
+              NÀO TA HÃY ĐẾN <br />
+              <span class="text-amber-600">BÁI THỜ NGƯỜI.</span>
+            </h2>
+
+            <div class="space-y-3 font-serif text-amber-900 text-lg sm:text-2xl font-bold mb-8 leading-relaxed">
+              <p>“Nguyện xin ánh sáng Chúa Kitô chiếu soi trong tâm hồn con.”</p>
+              <p class="text-sm sm:text-base text-slate-700 font-kids not-italic font-bold leading-relaxed">
+                “Nguyện xin Người ban cho con đức tin khi bối rối,<br />
+                niềm hy vọng khi mệt mỏi,<br />
+                bình an khi âu lo,<br />
+                và tình yêu để con sẻ chia cùng tất cả mọi người.”
+              </p>
+            </div>
+
+            <!-- Nút Giữ Mãi Ánh Sáng Nơi Con -->
+            <button onclick="window.faithJourney.keepTheLight(event)" class="m3-kids-btn-primary text-lg sm:text-2xl px-10 py-5 group shadow-xl">
+              <span class="text-3xl group-hover:scale-125 transition-transform">✨</span>
+              <span>GIỮ MÃI ÁNH SÁNG NƠI CON</span>
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Chân Trang M3 Màu Sáng Ấm Áp -->
+  <footer class="relative z-20 border-t-2 border-amber-300 bg-white py-12 px-4 sm:px-6 lg:px-8 text-center shadow-inner">
+    <div class="max-w-4xl mx-auto">
+      <div class="w-14 h-14 rounded-2xl bg-amber-400 border-2 border-white flex items-center justify-center text-white text-3xl mx-auto mb-4 shadow-md">
+        🌟
+      </div>
+      <h3 class="text-xl font-black text-amber-800 tracking-wider uppercase mb-2">
+        ÁNH SÁNG GIÁNG SINH – HÀNH TRÌNH ĐỨC TIN
+      </h3>
+      <p class="text-sm sm:text-base text-slate-600 max-w-lg mx-auto italic font-bold mb-6">
+        “Giáng Sinh không chỉ là kỷ niệm Chúa sinh ra năm xưa.<br />
+        Đó là lời mời gọi để Ánh Sáng của Người được sinh ra trong chính tâm hồn mỗi chúng ta.”
+      </p>
+
+      <div class="flex items-center justify-center gap-3 text-xs sm:text-sm font-extrabold text-amber-700">
+        <span>Vinh danh Thiên Chúa trên trời</span>
+        <span>⭐</span>
+        <span>Bình an dưới thế cho người thiện tâm</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MODAL: Suy Niệm Nến Mùa Vọng (Màu Sáng) -->
+  <div id="advent-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-fade-in">
+    <div class="m3-bright-card max-w-md w-full p-6 sm:p-8 bg-white border-4 border-amber-400 text-center relative shadow-2xl">
+      
+      <button onclick="window.faithJourney.closeAdventModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-800 text-2xl font-bold">✕</button>
+      
+      <div class="w-16 h-16 rounded-full bg-amber-100 border-2 border-amber-400 flex items-center justify-center mx-auto text-3xl mb-4 shadow-sm">
+        🕯️
+      </div>
+
+      <h3 id="advent-modal-title" class="text-2xl font-black text-amber-800 mb-2">TUẦN 1 – HY VỌNG</h3>
+      <p id="advent-modal-msg" class="text-base font-bold text-slate-800 mb-4"></p>
+      
+      <div class="p-4 rounded-2xl bg-amber-50 border border-amber-300 mb-6 text-left">
+        <span class="block text-xs uppercase font-black text-amber-800 mb-1">Gợi ý cho trái tim bé:</span>
+        <p id="advent-modal-reflection" class="text-sm text-slate-700 font-bold"></p>
+      </div>
+
+      <button id="advent-modal-action-btn" onclick="window.faithJourney.closeAdventModal()" class="m3-kids-btn-primary w-full py-3 text-sm font-black">
+        AMEN & CON QUYẾT TÂM
+      </button>
+    </div>
+  </div>
+
+  <!-- HIỆU ỨNG ÁNH SÁNG TOÀN MÀN HÌNH & LỜI CHÚC MÙNG GIÁNG SINH (Màu Vàng Nắng Sáng) -->
+  <div id="golden-climax-veil" class="golden-light-veil"></div>
+
+  <div id="climax-modal" class="fixed inset-0 z-[10000] hidden items-center justify-center p-4 bg-black/30 backdrop-blur-md animate-fade-in">
+    <div class="m3-bright-card max-w-2xl w-full p-8 sm:p-12 text-center bg-gradient-to-b from-white via-amber-50 to-yellow-100 border-4 border-amber-400 shadow-2xl relative">
+      
+      <div class="text-6xl mb-4 animate-bounce">🌟 👼 🐑</div>
+      <span class="text-xs uppercase tracking-widest font-black text-amber-900 px-4 py-1.5 rounded-full bg-amber-200 border border-amber-300">Ân Sủng & Chúc Lành</span>
+      
+      <h1 class="text-4xl sm:text-6xl font-black text-amber-600 tracking-tight my-4 drop-shadow-sm">
+        CHÚC MỪNG GIÁNG SINH
+      </h1>
+
+      <p class="text-2xl sm:text-3xl font-serif italic text-slate-900 font-bold mb-6">
+        “Nguyện xin Chúa Kitô tái sinh trong tâm hồn chúng con.”
+      </p>
+
+      <div class="p-6 rounded-2xl bg-white border-2 border-amber-300 text-slate-700 text-base font-bold leading-relaxed mb-8 shadow-sm">
+        “Giáng Sinh không chỉ là kỷ niệm Chúa sinh ra năm xưa.<br />
+        Đó là lời mời gọi để Ánh Sáng của Người được sinh ra trong chính tâm hồn mỗi chúng ta.”
+      </div>
+
+      <button onclick="window.faithJourney.dismissClimax()" class="m3-kids-btn-primary px-10 py-4 text-lg">
+        ✨ Amen • Giữ Mãi Ánh Sáng Yêu Thương
+      </button>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/audio.js"></script>
+  <script src="js/canvas.js"></script>
+  <script src="js/journey.js"></script>
+</body>
+</html>
